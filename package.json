@@ -2,25 +2,43 @@
   "name": "worldcup_lottery",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.32.1",
+  "engines": {
+    "node": "22.14.0",
+    "pnpm": "10.32.1"
+  },
   "scripts": {
+    "check-node": "node -e \"const v=process.versions.node;if(v!=='22.14.0'){console.error('Expected Node.js 22.14.0, got '+v+'. Run: nvm use 22.14.0');process.exit(1)}\"",
+    "preinstall": "pnpm run check-node",
     "dev": "next dev",
     "build": "next build",
+    "init-db": "tsx scripts/init-db.ts",
+    "rebuild:sqlite": "pnpm run check-node && pnpm rebuild better-sqlite3",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^9.6.0",
+    "iron-session": "^8.0.4",
     "next": "16.2.9",
     "react": "19.2.4",
+    "react-custom-roulette": "^1.4.1",
     "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "autoprefixer": "^10.5.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
-    "tailwindcss": "^4",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.19",
+    "tsx": "^4.22.4",
     "typescript": "^5"
   }
 }
