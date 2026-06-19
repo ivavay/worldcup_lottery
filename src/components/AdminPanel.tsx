@@ -31,8 +31,8 @@ export function AdminPanel() {
   const router = useRouter();
   const [pool, setPool] = useState<AdminPool>(emptyPool);
   const [first, setFirst] = useState("0");
-const [second, setSecond] = useState("0");
-const [third, setThird] = useState("0");
+  const [second, setSecond] = useState("0");
+  const [third, setThird] = useState("0");
   const [expanded, setExpanded] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -46,8 +46,8 @@ const [third, setThird] = useState("0");
     const data = await res.json();
     setPool(data);
     setFirst(String(data.firstPrizeTotal));
-setSecond(String(data.secondPrizeTotal));
-setThird(String(data.thirdPrizeTotal));
+    setSecond(String(data.secondPrizeTotal));
+    setThird(String(data.thirdPrizeTotal));
   }, [router]);
 
   useEffect(() => {
@@ -55,13 +55,13 @@ setThird(String(data.thirdPrizeTotal));
     // eslint-disable-next-line react-hooks/set-state-in-effect
     load().catch(() => setError("後台資料讀取失敗。"));
   }, [load]);
-const firstValue = Number(first || 0);
-const secondValue = Number(second || 0);
-const thirdValue = Number(third || 0);
+  const firstValue = Number(first || 0);
+  const secondValue = Number(second || 0);
+  const thirdValue = Number(third || 0);
   const total = firstValue + secondValue + thirdValue;
-const invalid =
-  total > 48 ||
-  [firstValue, secondValue, thirdValue].some((value) => value < 0 || value > 10);
+  const invalid =
+    total > 48 ||
+    [firstValue, secondValue, thirdValue].some((value) => value < 0 || value > 10);
   const rows = useMemo(() => {
     const prizeByTeam = new Map(pool.mapping.map((item) => [item.teamCode, item.prize]));
     return TEAMS.map((team) => ({ ...team, prize: prizeByTeam.get(team.code) ?? "none" }));
@@ -107,16 +107,16 @@ const invalid =
   }
 
   return (
-    <main className="stadium-grid min-h-screen bg-[#071323] px-10 py-8">
+    <main className="stadium-grid min-h-screen overflow-x-hidden bg-[#071323] px-4 py-5 sm:px-6 lg:px-10 lg:py-8">
       <div className="mx-auto max-w-7xl">
-        <header className="flex items-center justify-between border-b border-white/10 pb-6">
-          <h1 className="text-4xl font-black text-white">🏆 抽獎系統後台</h1>
-          <button onClick={logout} className="border border-amber-300/50 px-5 py-2 font-bold text-amber-100 hover:bg-amber-300 hover:text-slate-950">登出</button>
+        <header className="flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-center sm:justify-between sm:pb-6">
+          <h1 className="text-3xl font-black text-white sm:text-4xl">🏆 抽獎系統後台</h1>
+          <button onClick={logout} className="w-full border border-amber-300/50 px-5 py-2 font-bold text-amber-100 hover:bg-amber-300 hover:text-slate-950 sm:w-auto">登出</button>
         </header>
 
-        <section className="mt-8 border border-white/10 bg-slate-950/60 p-6">
-          <h2 className="text-2xl font-black text-amber-200">獎池設定</h2>
-          <div className="mt-5 grid grid-cols-3 gap-5">
+        <section className="mt-6 border border-white/10 bg-slate-950/60 p-4 sm:mt-8 sm:p-6">
+          <h2 className="text-xl font-black text-amber-200 sm:text-2xl">獎池設定</h2>
+          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
             {[
               ["一等獎名額", first, setFirst],
               ["二等獎名額", second, setSecond],
@@ -125,45 +125,45 @@ const invalid =
               <label key={label as string} className="text-sm font-bold text-slate-200">
                 {label as string}
                 <input
-  type="number"
-  min={0}
-  max={10}
-  value={value as string}
-  onChange={(event) => (setter as (value: string) => void)(event.target.value)}
-  className="mt-2 w-full border border-white/10 bg-slate-900 px-4 py-3 text-2xl font-black text-white outline-none focus:border-amber-300"
-/>
+                  type="number"
+                  min={0}
+                  max={10}
+                  value={value as string}
+                  onChange={(event) => (setter as (value: string) => void)(event.target.value)}
+                  className="mt-2 w-full border border-white/10 bg-slate-900 px-4 py-3 text-2xl font-black text-white outline-none focus:border-amber-300"
+                />
               </label>
             ))}
           </div>
-          <div className="mt-6 flex items-center gap-4">
-            <button onClick={save} disabled={invalid} className="bg-amber-300 px-6 py-3 font-black text-slate-950 disabled:opacity-50">儲存並產生隨機對應</button>
-            <button onClick={reset} className="border border-emerald-300/60 px-6 py-3 font-black text-emerald-100 hover:bg-emerald-400 hover:text-slate-950">重設獎池</button>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+            <button onClick={save} disabled={invalid} className="w-full bg-amber-300 px-6 py-3 font-black text-slate-950 disabled:opacity-50 sm:w-auto">儲存並產生隨機對應</button>
+            <button onClick={reset} className="w-full border border-emerald-300/60 px-6 py-3 font-black text-emerald-100 hover:bg-emerald-400 hover:text-slate-950 sm:w-auto">重設獎池</button>
             <span className={invalid ? "text-red-200" : "text-slate-300"}>目前總名額：{total} / 48</span>
           </div>
           {message ? <p className="mt-4 text-emerald-200">{message}</p> : null}
           {error ? <p className="mt-4 text-red-200">{error}</p> : null}
         </section>
 
-        <section className="mt-6 grid grid-cols-3 gap-5">
+        <section className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
           {[
             ["一等獎", pool.firstPrizeTotal, pool.firstPrizeTotal - pool.firstPrizeRemaining, pool.firstPrizeRemaining],
             ["二等獎", pool.secondPrizeTotal, pool.secondPrizeTotal - pool.secondPrizeRemaining, pool.secondPrizeRemaining],
             ["三等獎", pool.thirdPrizeTotal, pool.thirdPrizeTotal - pool.thirdPrizeRemaining, pool.thirdPrizeRemaining],
           ].map(([label, totalCount, drawn, remaining]) => (
-            <div key={label as string} className="border border-white/10 bg-slate-950/60 p-6">
+            <div key={label as string} className="border border-white/10 bg-slate-950/60 p-4 sm:p-6">
               <h3 className="text-xl font-black text-white">{label as string}</h3>
               <p className="mt-4 text-lg text-slate-200">設定 {totalCount as number} / 已抽 {drawn as number} / 剩餘 <span className="font-black text-amber-200">{remaining as number}</span></p>
             </div>
           ))}
         </section>
 
-        <section className="mt-6 border border-white/10 bg-slate-950/60 p-6">
-          <button onClick={() => setExpanded((value) => !value)} className="flex w-full items-center justify-between text-left text-2xl font-black text-amber-200">
+        <section className="mt-6 border border-white/10 bg-slate-950/60 p-4 sm:p-6">
+          <button onClick={() => setExpanded((value) => !value)} className="flex w-full items-center justify-between gap-4 text-left text-xl font-black text-amber-200 sm:text-2xl">
             球隊-獎項對應
-            <span>{expanded ? "收合" : "展開"}</span>
+            <span className="shrink-0">{expanded ? "收合" : "展開"}</span>
           </button>
           {expanded ? (
-            <div className="mt-5 grid max-h-[420px] grid-cols-4 gap-3 overflow-auto pr-2">
+            <div className="mt-5 grid max-h-[420px] grid-cols-1 gap-3 overflow-auto pr-1 sm:grid-cols-2 lg:grid-cols-4 lg:pr-2">
               {rows.map((row) => (
                 <div key={row.code} className="flex items-center justify-between border border-white/10 bg-slate-900/80 px-3 py-2">
                   <span className="font-bold text-white">{row.flag} {row.code}</span>

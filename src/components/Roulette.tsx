@@ -37,7 +37,7 @@ type RouletteProps = {
 
 export function WorldCupRoulette({ mustStartSpinning, prizeNumber, onStopSpinning }: RouletteProps) {
   return (
-    <div className="worldcup-roulette gold-ring flex aspect-square w-[min(58vh,560px)] items-center justify-center rounded-full bg-slate-950/70 p-4">
+    <div className="worldcup-roulette gold-ring flex aspect-square w-[min(88vw,58vh,560px)] items-center justify-center rounded-full bg-slate-950/70 p-2 sm:p-4">
       <Wheel
         mustStartSpinning={mustStartSpinning}
         prizeNumber={prizeNumber}

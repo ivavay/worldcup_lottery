@@ -30,8 +30,8 @@ export function AdminLoginForm() {
   }
 
   return (
-    <form onSubmit={submit} className="w-full max-w-md border border-white/10 bg-slate-950/70 p-8">
-      <h1 className="text-4xl font-black text-white">後台登入</h1>
+    <form onSubmit={submit} className="w-full max-w-md border border-white/10 bg-slate-950/70 p-6 sm:p-8">
+      <h1 className="text-3xl font-black text-white sm:text-4xl">後台登入</h1>
       <label className="mt-8 block text-sm font-bold text-amber-200">
         使用者名稱
         <input value={username} onChange={(event) => setUsername(event.target.value)} className="mt-2 w-full border border-white/10 bg-slate-900 px-4 py-3 text-white outline-none focus:border-amber-300" />

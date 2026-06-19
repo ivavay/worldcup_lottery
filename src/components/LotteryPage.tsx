@@ -75,26 +75,26 @@ export function LotteryPage() {
   const dots = Array.from({ length: 3 }, (_, index) => index < (session?.spinsRemaining ?? 3));
 
   return (
-    <main className="stadium-grid min-h-screen overflow-hidden bg-[#071323]">
-      <section className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-12 py-8">
-        <header className="flex items-center justify-between border-b border-white/10 pb-6">
+    <main className="stadium-grid min-h-screen overflow-x-hidden bg-[#071323]">
+      <section className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-5 sm:px-8 lg:px-12 lg:py-8">
+        <header className="flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-center sm:justify-between sm:pb-6">
           <div>
-            <p className="text-base font-bold uppercase tracking-[0.35em] text-emerald-300">FIFA World Cup 2026</p>
-            <h1 className="mt-2 text-5xl font-black tracking-normal text-white">2026 世界盃抽獎活動</h1>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-emerald-300 sm:text-base sm:tracking-[0.35em]">FIFA World Cup 2026</p>
+            <h1 className="mt-2 text-3xl font-black tracking-normal text-white sm:text-5xl">2026 世界盃抽獎活動</h1>
           </div>
-          <div className="border border-amber-300/50 px-6 py-3 text-right">
+          <div className="w-full border border-amber-300/50 px-4 py-3 text-left sm:w-auto sm:px-6 sm:text-right">
             <p className="text-sm text-amber-200">本次活動由俱樂部舉辦</p>
-            <p className="mt-1 text-2xl font-black text-amber-300">剩餘次數：{session?.spinsRemaining ?? 3}</p>
+            <p className="mt-1 text-xl font-black text-amber-300 sm:text-2xl">剩餘次數：{session?.spinsRemaining ?? 3}</p>
           </div>
         </header>
 
-        <div className="grid flex-1 grid-cols-[1fr_340px] items-center gap-10 py-10">
+        <div className="grid flex-1 grid-cols-1 items-center gap-6 py-6 lg:grid-cols-[1fr_340px] lg:gap-10 lg:py-10">
           <div className="flex justify-center">
             <WorldCupRoulette mustStartSpinning={spinning} prizeNumber={prizeNumber} onStopSpinning={handleStop} />
           </div>
 
-          <aside className="border-l border-white/10 pl-8">
-            <div className="mb-8 flex gap-3">
+          <aside className="border-t border-white/10 pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+            <div className="mb-6 flex justify-center gap-3 lg:mb-8 lg:justify-start">
               {dots.map((active, index) => (
                 <span
                   key={index}
@@ -116,12 +116,12 @@ export function LotteryPage() {
               type="button"
               disabled={disabled}
               onClick={spin}
-              className="w-full bg-amber-300 px-8 py-5 text-2xl font-black text-slate-950 transition hover:bg-amber-200 disabled:cursor-not-allowed disabled:bg-slate-600 disabled:text-slate-300"
+              className="w-full bg-amber-300 px-8 py-4 text-xl font-black text-slate-950 transition hover:bg-amber-200 disabled:cursor-not-allowed disabled:bg-slate-600 disabled:text-slate-300 sm:py-5 sm:text-2xl"
             >
               開始抽獎
             </button>
 
-            <div className="mt-8 grid gap-3 text-lg text-slate-200">
+            <div className="mt-6 grid gap-3 text-base text-slate-200 sm:mt-8 sm:text-lg">
               <p>一等獎剩餘：<span className="font-bold text-amber-200">{pool?.firstPrizeRemaining ?? 0}</span></p>
               <p>二等獎剩餘：<span className="font-bold text-amber-200">{pool?.secondPrizeRemaining ?? 0}</span></p>
               <p>三等獎剩餘：<span className="font-bold text-amber-200">{pool?.thirdPrizeRemaining ?? 0}</span></p>
