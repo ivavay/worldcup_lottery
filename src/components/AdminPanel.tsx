@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { PRIZE_LABELS, type TeamPrizeMapping } from "@/lib/prize";
 import { TEAMS } from "@/lib/teams";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 type AdminPool = {
   firstPrizeTotal: number;
@@ -30,9 +30,9 @@ const emptyPool: AdminPool = {
 export function AdminPanel() {
   const router = useRouter();
   const [pool, setPool] = useState<AdminPool>(emptyPool);
-  const [first, setFirst] = useState(0);
-  const [second, setSecond] = useState(0);
-  const [third, setThird] = useState(0);
+  const [first, setFirst] = useState("0");
+const [second, setSecond] = useState("0");
+const [third, setThird] = useState("0");
   const [expanded, setExpanded] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -45,9 +45,9 @@ export function AdminPanel() {
     }
     const data = await res.json();
     setPool(data);
-    setFirst(data.firstPrizeTotal);
-    setSecond(data.secondPrizeTotal);
-    setThird(data.thirdPrizeTotal);
+    setFirst(String(data.firstPrizeTotal));
+setSecond(String(data.secondPrizeTotal));
+setThird(String(data.thirdPrizeTotal));
   }, [router]);
 
   useEffect(() => {
@@ -55,10 +55,13 @@ export function AdminPanel() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     load().catch(() => setError("後台資料讀取失敗。"));
   }, [load]);
-
-  const total = first + second + third;
-  const invalid = total > 48 || [first, second, third].some((value) => value < 0 || value > 10);
-
+const firstValue = Number(first || 0);
+const secondValue = Number(second || 0);
+const thirdValue = Number(third || 0);
+  const total = firstValue + secondValue + thirdValue;
+const invalid =
+  total > 48 ||
+  [firstValue, secondValue, thirdValue].some((value) => value < 0 || value > 10);
   const rows = useMemo(() => {
     const prizeByTeam = new Map(pool.mapping.map((item) => [item.teamCode, item.prize]));
     return TEAMS.map((team) => ({ ...team, prize: prizeByTeam.get(team.code) ?? "none" }));
@@ -74,7 +77,7 @@ export function AdminPanel() {
     const res = await fetch("/api/admin/prize-pool", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ firstPrize: first, secondPrize: second, thirdPrize: third }),
+      body: JSON.stringify({ firstPrize: firstValue, secondPrize: secondValue, thirdPrize: thirdValue }),
     });
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
@@ -122,13 +125,13 @@ export function AdminPanel() {
               <label key={label as string} className="text-sm font-bold text-slate-200">
                 {label as string}
                 <input
-                  type="number"
-                  min={0}
-                  max={10}
-                  value={value as number}
-                  onChange={(event) => (setter as (value: number) => void)(Number(event.target.value))}
-                  className="mt-2 w-full border border-white/10 bg-slate-900 px-4 py-3 text-2xl font-black text-white outline-none focus:border-amber-300"
-                />
+  type="number"
+  min={0}
+  max={10}
+  value={value as string}
+  onChange={(event) => (setter as (value: string) => void)(event.target.value)}
+  className="mt-2 w-full border border-white/10 bg-slate-900 px-4 py-3 text-2xl font-black text-white outline-none focus:border-amber-300"
+/>
               </label>
             ))}
           </div>
