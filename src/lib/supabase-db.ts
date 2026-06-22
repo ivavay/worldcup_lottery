@@ -72,7 +72,12 @@ async function supabaseRequest<T>(path: string, init: RequestInit = {}) {
     return null as T;
   }
 
-  return (await res.json()) as T;
+  const text = await res.text();
+  if (!text) {
+    return null as T;
+  }
+
+  return JSON.parse(text) as T;
 }
 
 export async function getPrizePool() {
@@ -95,7 +100,7 @@ export function parseTeamMapping(row: Pick<SupabasePrizePoolRow, "team_mapping">
 export async function getOrCreateSpinSession(sessionId: string) {
   await supabaseRequest<null>("/spin_sessions", {
     method: "POST",
-    headers: { Prefer: "resolution=ignore-duplicates" },
+    headers: { Prefer: "resolution=ignore-duplicates,return=minimal" },
     body: JSON.stringify({ session_id: sessionId }),
   });
 
