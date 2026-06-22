@@ -4,11 +4,11 @@
   "private": true,
   "packageManager": "pnpm@10.32.1",
   "engines": {
-    "node": "22.14.0",
+    "node": "22.x",
     "pnpm": "10.32.1"
   },
   "scripts": {
-    "check-node": "node -e \"const v=process.versions.node;if(v!=='22.14.0'){console.error('Expected Node.js 22.14.0, got '+v+'. Run: nvm use 22.14.0');process.exit(1)}\"",
+    "check-node": "node -e \"const major=process.versions.node.split('.')[0];if(major!=='22'){console.error('Expected Node.js 22.x, got '+process.versions.node+'.');process.exit(1)}\"",
     "preinstall": "pnpm run check-node",
     "dev": "next dev",
     "build": "next build",
