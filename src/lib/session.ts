@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { cookies } from "next/headers";
+import { getAdminByUsername } from "./supabase-db";
 
 const SPIN_COOKIE = "wc_spin_session";
 const ADMIN_COOKIE = "wc_admin_session";
@@ -40,5 +41,8 @@ export async function isAdminAuthenticated() {
   const value = cookieStore.get(ADMIN_COOKIE)?.value;
   if (!value) return false;
   const [username, signature] = value.split(".");
-  return username === "admin" && signature === sign(username);
+  if (!username || signature !== sign(username)) return false;
+
+  const admin = await getAdminByUsername(username);
+  return Boolean(admin);
 }
