@@ -98,11 +98,23 @@ export function parseTeamMapping(row: Pick<SupabasePrizePoolRow, "team_mapping">
 }
 
 export async function getOrCreateSpinSession(sessionId: string) {
-  await supabaseRequest<null>("/spin_sessions", {
+  const existingRows = await supabaseRequest<SupabaseSpinSessionRow[]>(
+    `/spin_sessions?session_id=eq.${encodeURIComponent(sessionId)}&select=*`,
+  );
+  const existingSession = existingRows[0];
+  if (existingSession) {
+    return existingSession;
+  }
+
+  const createdRows = await supabaseRequest<SupabaseSpinSessionRow[]>("/spin_sessions?select=*", {
     method: "POST",
-    headers: { Prefer: "resolution=ignore-duplicates,return=minimal" },
+    headers: { Prefer: "return=representation" },
     body: JSON.stringify({ session_id: sessionId }),
   });
+  const createdSession = createdRows[0];
+  if (createdSession) {
+    return createdSession;
+  }
 
   const rows = await supabaseRequest<SupabaseSpinSessionRow[]>(
     `/spin_sessions?session_id=eq.${encodeURIComponent(sessionId)}&select=*`,
