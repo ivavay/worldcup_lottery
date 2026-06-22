@@ -1,6 +1,6 @@
-import { getDb, getPrizePool, parseTeamMapping } from "@/lib/db";
 import { generatePrizeMapping } from "@/lib/prize";
 import { isAdminAuthenticated } from "@/lib/session";
+import { getPrizePool, parseTeamMapping, savePrizePool } from "@/lib/supabase-db";
 
 export const runtime = "nodejs";
 
@@ -14,7 +14,7 @@ async function guard() {
 export async function GET() {
   const denied = await guard();
   if (denied) return denied;
-  const pool = getPrizePool();
+  const pool = await getPrizePool();
 
   return Response.json({
     firstPrizeTotal: pool.first_prize_total,
@@ -23,7 +23,7 @@ export async function GET() {
     firstPrizeRemaining: pool.first_prize_remaining,
     secondPrizeRemaining: pool.second_prize_remaining,
     thirdPrizeRemaining: pool.third_prize_remaining,
-    isConfigured: pool.is_configured === 1,
+    isConfigured: pool.is_configured,
     mapping: parseTeamMapping(pool),
   });
 }
@@ -50,19 +50,7 @@ export async function POST(request: Request) {
   }
 
   const mapping = generatePrizeMapping(first, second, third);
-  getDb()
-    .transaction(() => {
-      getDb()
-        .prepare(
-          `UPDATE prize_pool
-           SET first_prize_total = ?, second_prize_total = ?, third_prize_total = ?,
-               first_prize_remaining = ?, second_prize_remaining = ?, third_prize_remaining = ?,
-               team_mapping = ?, is_configured = 1, updated_at = CURRENT_TIMESTAMP
-           WHERE id = 1`,
-        )
-        .run(first, second, third, first, second, third, JSON.stringify(mapping));
-      getDb().prepare("DELETE FROM spin_sessions").run();
-    })();
+  await savePrizePool(first, second, third, mapping);
 
   return Response.json({ success: true });
 }
